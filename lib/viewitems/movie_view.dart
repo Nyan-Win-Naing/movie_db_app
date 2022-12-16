@@ -7,15 +7,14 @@ class MovieView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 130,
-      margin: EdgeInsets.only(right: MARGIN_CARD_MEDIUM_2),
+      margin: EdgeInsets.only(right: MARGIN_MEDIUM_2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(
             "https://upload.wikimedia.org/wikipedia/en/7/74/The_Wolverine_posterUS.jpg",
-            width: 130,
             height: 180,
+            width: double.infinity,
             fit: BoxFit.cover,
           ),
           SizedBox(height: MARGIN_MEDIUM),

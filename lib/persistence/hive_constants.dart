@@ -1,0 +1,14 @@
+/// Hive Types
+const int HYPE_TYPE_ID_MOVIE_VO = 1;
+const int HIVE_TYPE_ID_COLLECTION_VO = 2;
+const int HIVE_TYPE_ID_GENRE_VO = 3;
+const int HIVE_TYPE_ID_PRODUCTION_COMPANY_VO = 4;
+const int HIVE_TYPE_ID_PRODUCTION_COUNTRY_VO = 5;
+const int HIVE_TYPE_ID_SPOKEN_LANGUAGE_VO = 6;
+const int HIVE_TYPE_ID_ACTOR_VO = 7;
+const int HIVE_TYPE_ID_DATE_VO = 8;
+
+/// Box Names
+const String BOX_NAME_MOVIE_VO = "BOX_NAME_MOVIE_VO";
+const String BOX_NAME_ACTOR_VO = "BOX_NAME_ACTOR_VO";
+const String BOX_NAME_GENRE_VO = "BOX_NAME_GENRE_VO";
