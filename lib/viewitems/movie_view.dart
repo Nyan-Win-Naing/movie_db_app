@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:movie_db_app/data/vos/movie_vo.dart';
+import 'package:movie_db_app/network/api_constants.dart';
 import 'package:movie_db_app/resources/dimens.dart';
 import 'package:movie_db_app/resources/strings.dart';
 import 'package:movie_db_app/widgets/rating_view.dart';
 
 class MovieView extends StatelessWidget {
+  final MovieVO? movie;
+
+  MovieView({required this.movie});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: MARGIN_MEDIUM_2),
+      margin: EdgeInsets.only(right: MARGIN_MEDIUM_2, bottom: MARGIN_MEDIUM),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            "https://upload.wikimedia.org/wikipedia/en/7/74/The_Wolverine_posterUS.jpg",
+          FadeInImage(
             height: 180,
             width: double.infinity,
             fit: BoxFit.cover,
+            placeholder: NetworkImage(
+              "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg",
+            ),
+            image: NetworkImage(
+              "$IMAGE_BASE_URL${movie?.posterPath}",
+            ),
           ),
           SizedBox(height: MARGIN_MEDIUM),
           Text(
-            "The Wolverine",
+            movie?.title ?? "",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Colors.white,
               fontSize: TEXT_13,
@@ -30,7 +43,7 @@ class MovieView extends StatelessWidget {
           Row(
             children: [
               Text(
-                "7.1",
+                "${movie?.voteAverage}",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: TEXT_13,
@@ -38,7 +51,7 @@ class MovieView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: MARGIN_SMALL),
-              RatingView(),
+              RatingView(rating: movie?.getRating() ?? 0),
             ],
           ),
         ],

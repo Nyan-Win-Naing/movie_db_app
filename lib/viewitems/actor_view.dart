@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:movie_db_app/data/vos/actor_vo.dart';
+import 'package:movie_db_app/network/api_constants.dart';
 import 'package:movie_db_app/resources/colors.dart';
 import 'package:movie_db_app/resources/dimens.dart';
 
 class ActorView extends StatelessWidget {
+
+  final ActorVO? credit;
+
+
+  ActorView({required this.credit});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,7 +19,7 @@ class ActorView extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: ActorImageView(),
+            child: ActorImageView(imageUrl: credit?.profilePath ?? "",),
           ),
           Align(
             alignment: Alignment.topRight,
@@ -19,7 +27,7 @@ class ActorView extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomLeft,
-            child: ActorNameAndLikedView(),
+            child: ActorNameAndLikedView(name: credit?.name ?? ""),
           )
         ],
       ),
@@ -28,9 +36,11 @@ class ActorView extends StatelessWidget {
 }
 
 class ActorNameAndLikedView extends StatelessWidget {
-  const ActorNameAndLikedView({
-    Key? key,
-  }) : super(key: key);
+
+  final String name;
+
+
+  ActorNameAndLikedView({required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +51,7 @@ class ActorNameAndLikedView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Leonardo DiCaprio",
+            name,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -91,14 +101,16 @@ class LikeView extends StatelessWidget {
 }
 
 class ActorImageView extends StatelessWidget {
-  const ActorImageView({
-    Key? key,
-  }) : super(key: key);
+
+  final String imageUrl;
+
+
+  ActorImageView({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      "https://images.saymedia-content.com/.image/t_share/MTc0NDI5MTc5NzI1NDg5Nzk4/top-10-greatest-leonardo-dicaprio-movies.jpg",
+      (imageUrl != null && imageUrl.isNotEmpty) ? "$IMAGE_BASE_URL$imageUrl" : "https://media.istockphoto.com/id/1273297997/vector/default-avatar-profile-icon-grey-photo-placeholder-hand-drawn-modern-man-avatar-profile-icon.jpg?s=612x612&w=0&k=20&c=n_K0uxMqCdHRxgeHYIQbzKebDeDMpY2TuqKsknTHcts=",
       fit: BoxFit.cover,
     );
   }

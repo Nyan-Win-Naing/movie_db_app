@@ -1,6 +1,7 @@
 /// Base URL
 const String BASE_URL_DIO = "https://api.themoviedb.org";
 const String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w400/";
+const String IMAGE_BASE_URL_WITHOUT_SLASH = "http://image.tmdb.org/t/p/w400";
 
 /// End Points
 const String ENDPOINT_GET_NOW_PLAYING = "/3/movie/now_playing";

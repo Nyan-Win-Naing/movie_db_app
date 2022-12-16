@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:movie_db_app/data/vos/collection_vo.dart';
 import 'package:movie_db_app/data/vos/genre_vo.dart';
@@ -125,39 +126,76 @@ class MovieVO {
   @HiveField(28)
   bool? isTopRated;
 
-  MovieVO(this.adult,
-      this.backDropPath,
-      this.genreIds,
-      this.id,
-      this.originalLanguage,
-      this.originalTitle,
-      this.overview,
-      this.popularity,
-      this.posterPath,
-      this.releaseDate,
-      this.title,
-      this.video,
-      this.voteAverage,
-      this.voteCount,
-      this.belongsToCollection,
-      this.budget,
-      this.genres,
-      this.homePage,
-      this.imdbId,
-      this.productionCompanies,
-      this.productionCountries,
-      this.revenue,
-      this.runTime,
-      this.spokenLanguages,
-      this.status,
-      this.tagLine, {
-        this.isPopular,
-        this.isNowPlaying,
-        this.isTopRated,
-      });
+  MovieVO({
+    this.adult,
+    this.backDropPath,
+    this.genreIds,
+    this.id,
+    this.originalLanguage,
+    this.originalTitle,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.releaseDate,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,
+    this.belongsToCollection,
+    this.budget,
+    this.genres,
+    this.homePage,
+    this.imdbId,
+    this.productionCompanies,
+    this.productionCountries,
+    this.revenue,
+    this.runTime,
+    this.spokenLanguages,
+    this.status,
+    this.tagLine,
+    this.isPopular,
+    this.isNowPlaying,
+    this.isTopRated,
+  });
 
   factory MovieVO.fromJson(Map<String, dynamic> json) =>
       _$MovieVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieVOToJson(this);
+
+  @override
+  String toString() {
+    return 'MovieVO{title: $title}';
+  }
+
+  double getRating() {
+    double rating = (voteAverage ?? 0) / 2;
+    return rating;
+  }
+
+  String getVoteAverage() {
+    return voteAverage?.toStringAsFixed(1) ?? "";
+  }
+
+  String getFormattedReleaseDate() {
+    DateTime? releaseDate = DateTime.tryParse(this.releaseDate ?? "");
+    return DateFormat("dd/MM/yyyy").format(releaseDate ?? DateTime.now());
+  }
+
+  String getFormattedMovieRunTime() {
+    int hour = (runTime ?? 0) ~/ 60;
+    int minutes = (runTime ?? 0) % 60;
+    return "${hour}h ${minutes}min";
+  }
+
+  String getGenresWithCommaSeparatedValue() {
+    return genres?.map((genre) => genre.name ?? "").toList().join(",") ?? "";
+  }
+
+  String getProductionCountriesWithCommaSeparated() {
+    return productionCountries
+        ?.map((productionCountry) => productionCountry.name ?? "")
+        .toList()
+        .join(",") ?? "";
+  }
 }

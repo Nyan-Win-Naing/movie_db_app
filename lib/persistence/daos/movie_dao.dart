@@ -69,12 +69,10 @@ class MovieDao {
   /// For Reactive
   List<MovieVO> getNowPlayingMoviesReactive() {
     if (getAllMovies() != null && (getAllMovies().isNotEmpty)) {
-      print("Movies are present....");
       return getAllMovies()
           .where((element) => element.isNowPlaying ?? false)
           .toList();
     } else {
-      print("No Movies......");
       return [];
     }
   }

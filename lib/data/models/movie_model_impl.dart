@@ -32,15 +32,18 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getMovieDetails(int movieId) {
+  void getMovieDetails(int movieId, int tabIndex) {
     mDataAgent.getMovieDetails(movieId).then((movie) async {
+      movie?.isNowPlaying = (tabIndex == 0);
+      movie?.isPopular = tabIndex == 1;
+      movie?.isTopRated = tabIndex == 2;
       mMovieDao.saveSingleMovie(movie);
     });
   }
 
   @override
-  Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
-    getMovieDetails(movieId);
+  Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId, int tabIndex) {
+    getMovieDetails(movieId, tabIndex);
     return mMovieDao
         .getAllMoviesEventStream()
         .startWith(mMovieDao.getMovieByIdStream(movieId))
@@ -48,8 +51,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getNowPlayingMovies() {
-    mDataAgent.getNowPlayingMovies(1).then((movies) async {
+  void getNowPlayingMovies(int page) {
+    mDataAgent.getNowPlayingMovies(page).then((movies) async {
       List<MovieVO>? nowPlayingMovies = movies?.map((movie) {
         movie.isNowPlaying = true;
         movie.isPopular = false;
@@ -62,7 +65,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase() {
-    getNowPlayingMovies();
+    getNowPlayingMovies(1);
     return mMovieDao
         .getAllMoviesEventStream()
         .startWith(mMovieDao.getNowPlayingMoviesStream())
@@ -70,8 +73,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getPopularMovies() {
-    mDataAgent.getPopularMovies(1).then((movies) async {
+  void getPopularMovies(int page) {
+    mDataAgent.getPopularMovies(page).then((movies) async {
       List<MovieVO>? popularMovies = movies?.map((movie) {
         movie.isNowPlaying = false;
         movie.isPopular = true;
@@ -84,7 +87,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Stream<List<MovieVO>> getPopularMoviesFromDatabase() {
-    getPopularMovies();
+    getPopularMovies(1);
     return mMovieDao
         .getAllMoviesEventStream()
         .startWith(mMovieDao.getPopularMoviesStream())
@@ -92,8 +95,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getTopRatedMovies() {
-    mDataAgent.getTopRatedMovies(1).then((movies) async {
+  void getTopRatedMovies(int page) {
+    mDataAgent.getTopRatedMovies(page).then((movies) async {
       List<MovieVO>? topRatedMovies = movies?.map((movie) {
         movie.isNowPlaying = false;
         movie.isPopular = false;
@@ -106,7 +109,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Stream<List<MovieVO>> getTopRatedMoviesFromDatabase() {
-    getTopRatedMovies();
+    getTopRatedMovies(1);
     return mMovieDao
         .getAllMoviesEventStream()
         .startWith(mMovieDao.getTopRatedMoviesStream())
