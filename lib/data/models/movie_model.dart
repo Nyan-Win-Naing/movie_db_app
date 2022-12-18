@@ -6,13 +6,16 @@ abstract class MovieModel {
   // Network
   void getNowPlayingMovies(int page);
   void getPopularMovies(int page);
-  void getTopRatedMovies(int page);
-  void getMovieDetails(int movieId, int tabIndex);
+  Future<List<MovieVO>?> getTopRatedMovies(int page);
+  Future<MovieVO?> getMovieDetails(int movieId, int tabIndex);
   Future<List<List<ActorVO>?>> getCreditsByMovie(int movieId);
+  Future<List<MovieVO>?> searchMovies(String searchKeyword);
+  void getAllGenres();
+  Future<List<MovieVO>?> getMoviesByGenre(int genreId);
 
   // Database
   Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase();
   Stream<List<MovieVO>> getPopularMoviesFromDatabase();
-  Stream<List<MovieVO>> getTopRatedMoviesFromDatabase();
-  Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId, int tabIndex);
+  Future<MovieVO?> getMovieDetailsFromDatabase(int movieId);
+  Stream<List<GenreVO>> getAllGenresFromDatabase();
 }

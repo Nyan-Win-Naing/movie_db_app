@@ -15,7 +15,7 @@ class HorizontalActorListView extends StatelessWidget {
     return Container(
       height: 180,
       child: ListView.builder(
-        padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
+        padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
         scrollDirection: Axis.horizontal,
         itemCount: creditsList.length,
         itemBuilder: (context, index) {

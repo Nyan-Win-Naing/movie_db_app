@@ -11,4 +11,5 @@ abstract class MovieDataAgent {
   Future<List<ActorVO>?> getActors(int page);
   Future<MovieVO?> getMovieDetails(int movieId);
   Future<List<List<ActorVO>?>> getCreditsByMovies(int movieId);
+  Future<List<MovieVO>?> getSearchMovies(String searchKeyword);
 }

@@ -31,9 +31,13 @@ class HomeController extends GetxController {
       debugPrint(error.toString());
     });
 
-    mMovieModel.getTopRatedMoviesFromDatabase().listen((topRatedMovies) {
-      searchMovies.assignAll(topRatedMovies);
-    }).onError((error) {
+    initializeSearchMovies();
+  }
+
+  void initializeSearchMovies() {
+    mMovieModel.getTopRatedMovies(1).then((topRatedMovies) {
+      searchMovies.assignAll(topRatedMovies ?? []);
+    }).catchError((error) {
       debugPrint(error.toString());
     });
   }
@@ -49,6 +53,18 @@ class HomeController extends GetxController {
     } else if(tabIndex.value == 1) {
       pageForPopularMovies += 1;
       mMovieModel.getPopularMovies(pageForPopularMovies);
+    }
+  }
+
+  void onSearchMovies(String keyword) {
+    if(keyword.isNotEmpty) {
+      mMovieModel.searchMovies(keyword).then((searchedMovies) {
+        searchMovies.assignAll(searchedMovies ?? []);
+      }).catchError((error) {
+        debugPrint(error.toString());
+      });
+    } else {
+      initializeSearchMovies();
     }
   }
 }

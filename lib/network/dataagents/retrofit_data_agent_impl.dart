@@ -88,4 +88,13 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
         .map((response) => response.results)
         .first;
   }
+
+  @override
+  Future<List<MovieVO>?> getSearchMovies(String searchKeyword) {
+    return mApi
+        .searchMovies(API_KEY, searchKeyword)
+        .asStream()
+        .map((response) => response.results)
+        .first;
+  }
 }

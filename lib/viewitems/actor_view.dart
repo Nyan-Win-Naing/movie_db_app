@@ -15,13 +15,13 @@ class ActorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 160,
-      margin: EdgeInsets.only(right: MARGIN_CARD_MEDIUM_2),
+      margin: const EdgeInsets.only(right: MARGIN_CARD_MEDIUM_2),
       child: Stack(
         children: [
           Positioned.fill(
             child: ActorImageView(imageUrl: credit?.profilePath ?? "",),
           ),
-          Align(
+          const Align(
             alignment: Alignment.topRight,
             child: LikeView(),
           ),
@@ -52,15 +52,15 @@ class ActorNameAndLikedView extends StatelessWidget {
         children: [
           Text(
             name,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
               fontSize: TEXT_13,
             ),
           ),
-          SizedBox(height: MARGIN_SMALL),
+          const SizedBox(height: MARGIN_SMALL),
           Row(
-            children: [
+            children: const [
               Icon(
                 Icons.favorite,
                 color: PLAY_BUTTON_COLOR,
@@ -90,8 +90,8 @@ class LikeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: MARGIN_MEDIUM, right: MARGIN_MEDIUM),
+    return const Padding(
+      padding: EdgeInsets.only(top: MARGIN_MEDIUM, right: MARGIN_MEDIUM),
       child: Icon(
         Icons.favorite_border,
         color: Colors.white,

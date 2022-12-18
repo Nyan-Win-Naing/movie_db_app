@@ -1,0 +1,16 @@
+const APP_TITLE = "MovieDB";
+const HINT_TEXT_SEARCH_MOVIES = "Search Movies";
+const LABEL_NOW_PLAYING_MOVIES = "Now Playing";
+const LABEL_POPULAR_MOVIES = "Popular Movies";
+const LABEL_SEARCH_MOVIES = "Search Movies";
+const TITTLE_ACTORS_TEXT = "ACTORS";
+const TITLE_CREATORS_TEXT = "CREATORS";
+const TITLE_STORY_LINE_TEXT = "STORYLINE";
+const ABOUT_FILM_TITLE = "ABOUT FILM";
+const LABEL_ORIGINAL_TITLE = "Original Title";
+const LABEL_TYPE = "Type";
+const LABEL_PRODUCTION = "Production";
+const LABEL_PREMIERE = "Premiere";
+const LABEL_DESCRIPTION = "Description";
+const BUTTON_PLAY_TRAILER_LABEL = "PLAY TRAILER";
+const BUTTON_RATE_MOVIES_LABEL = "RATE MOVIE";

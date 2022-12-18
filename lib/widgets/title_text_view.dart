@@ -14,7 +14,7 @@ class TitleTextWithMoreView extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: TITLE_TEXT_COLOR,
             fontWeight: FontWeight.w500,
           ),
@@ -23,7 +23,7 @@ class TitleTextWithMoreView extends StatelessWidget {
           visible: moreLabel != null,
           child: Text(
             moreLabel ?? "",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w500,
               decoration: TextDecoration.underline,

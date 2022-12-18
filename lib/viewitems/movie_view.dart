@@ -13,7 +13,7 @@ class MovieView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: MARGIN_MEDIUM_2, bottom: MARGIN_MEDIUM),
+      margin: const EdgeInsets.only(right: MARGIN_MEDIUM_2, bottom: MARGIN_MEDIUM),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,36 +21,39 @@ class MovieView extends StatelessWidget {
             height: 180,
             width: double.infinity,
             fit: BoxFit.cover,
-            placeholder: NetworkImage(
+            placeholder: const NetworkImage(
               "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg",
             ),
             image: NetworkImage(
-              "$IMAGE_BASE_URL${movie?.posterPath}",
+              (movie?.posterPath != null &&
+                      (movie?.posterPath?.isNotEmpty ?? false))
+                  ? "$IMAGE_BASE_URL${movie?.posterPath}"
+                  : "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg",
             ),
           ),
-          SizedBox(height: MARGIN_MEDIUM),
+          const SizedBox(height: MARGIN_MEDIUM),
           Text(
             movie?.title ?? "",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: TEXT_13,
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: MARGIN_MEDIUM),
+          const SizedBox(height: MARGIN_MEDIUM),
           Row(
             children: [
               Text(
                 "${movie?.voteAverage}",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: TEXT_13,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(height: MARGIN_SMALL),
+              const SizedBox(height: MARGIN_SMALL),
               RatingView(rating: movie?.getRating() ?? 0),
             ],
           ),

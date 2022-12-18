@@ -11,12 +11,14 @@ const String ENDPOINT_GET_GENRES = "/3/genre/movie/list";
 const String ENDPOINT_GET_MOVIES_BY_GENRE = "/3/discover/movie";
 const String ENDPOINT_GET_ACTORS = "/3/person/popular";
 const String ENDPOINT_GET_MOVIE_DETAILS = "/3/movie";
+const String ENDPOINT_GET_SEARCH_MOVIES = "/3/search/movie";
 
 /// Parameters
 const String PARAM_API_KEY = "api_key";
 const String PARAM_LANGUAGE = "language";
 const String PARAM_PAGE = "page";
 const String PARAM_GENRE_ID = "with_genres";
+const String PARAM_QUERY = "query";
 
 /// Constant Values
 const String API_KEY = "19d6149f34738ec93c495cd0527246ae";

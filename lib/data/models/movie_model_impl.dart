@@ -32,22 +32,19 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getMovieDetails(int movieId, int tabIndex) {
-    mDataAgent.getMovieDetails(movieId).then((movie) async {
+  Future<MovieVO?> getMovieDetails(int movieId, int tabIndex) {
+    return mDataAgent.getMovieDetails(movieId).then((movie) async {
       movie?.isNowPlaying = (tabIndex == 0);
       movie?.isPopular = tabIndex == 1;
       movie?.isTopRated = tabIndex == 2;
       mMovieDao.saveSingleMovie(movie);
+      return Future.value(movie);
     });
   }
 
   @override
-  Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId, int tabIndex) {
-    getMovieDetails(movieId, tabIndex);
-    return mMovieDao
-        .getAllMoviesEventStream()
-        .startWith(mMovieDao.getMovieByIdStream(movieId))
-        .map((event) => mMovieDao.getMovieByIdReactive(movieId));
+  Future<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
+    return Future.value(mMovieDao.getMovieById(movieId));
   }
 
   @override
@@ -95,24 +92,33 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getTopRatedMovies(int page) {
-    mDataAgent.getTopRatedMovies(page).then((movies) async {
-      List<MovieVO>? topRatedMovies = movies?.map((movie) {
-        movie.isNowPlaying = false;
-        movie.isPopular = false;
-        movie.isTopRated = true;
-        return movie;
-      }).toList();
-      mMovieDao.saveMovies(topRatedMovies ?? []);
+  Future<List<MovieVO>?> getTopRatedMovies(int page) {
+    return mDataAgent.getTopRatedMovies(page);
+  }
+
+  @override
+  Future<List<MovieVO>?> searchMovies(String searchKeyword) {
+    return mDataAgent.getSearchMovies(searchKeyword);
+  }
+
+  @override
+  void getAllGenres() {
+    mDataAgent.getGenres().then((genreList) async {
+      mGenreDao.saveAllGenres(genreList ?? []);
     });
   }
 
   @override
-  Stream<List<MovieVO>> getTopRatedMoviesFromDatabase() {
-    getTopRatedMovies(1);
-    return mMovieDao
-        .getAllMoviesEventStream()
-        .startWith(mMovieDao.getTopRatedMoviesStream())
-        .map((event) => mMovieDao.getTopRatedMoviesReactive());
+  Stream<List<GenreVO>> getAllGenresFromDatabase() {
+    getAllGenres();
+    return mGenreDao
+        .getAllGenresEventStream()
+        .startWith(mGenreDao.getAllGenresStream())
+        .map((event) => mGenreDao.getAllGenresReactive());
+  }
+
+  @override
+  Future<List<MovieVO>?> getMoviesByGenre(int genreId) {
+    return mDataAgent.getMoviesByGenre(genreId);
   }
 }

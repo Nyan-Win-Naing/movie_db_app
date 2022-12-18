@@ -17,3 +17,4 @@ const TEXT_BIG = 32.0;
 
 /// App Specific
 const TEXT_13 = 13.0;
+const MOVIE_LIST_HEIGHT = 260.0;

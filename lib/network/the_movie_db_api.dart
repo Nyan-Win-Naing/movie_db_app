@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:movie_db_app/data/vos/movie_vo.dart';
 import 'package:movie_db_app/network/api_constants.dart';
 import 'package:movie_db_app/network/responses/get_actors_response.dart';
@@ -64,5 +65,11 @@ abstract class TheMovieDbApi {
   Future<GetCreditsByMovieResponse> getCreditsByMovie(
     @Path("movie_id") String movieId,
     @Query(PARAM_API_KEY) String apiKey,
+  );
+
+  @GET(ENDPOINT_GET_SEARCH_MOVIES)
+  Future<MovieListResponse> searchMovies(
+    @Query(PARAM_API_KEY) String apiKey,
+    @Query(PARAM_QUERY) String searchKeyword,
   );
 }

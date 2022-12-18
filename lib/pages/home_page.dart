@@ -7,6 +7,8 @@ import 'package:movie_db_app/pages/movie_details_page.dart';
 import 'package:movie_db_app/pages/movie_search_page.dart';
 import 'package:movie_db_app/resources/colors.dart';
 import 'package:movie_db_app/resources/dimens.dart';
+import 'package:movie_db_app/resources/strings.dart';
+import 'package:movie_db_app/utils/debouncer.dart';
 import 'package:movie_db_app/viewitems/movie_view.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,14 +41,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: PRIMARY_COLOR,
-        title: Text(
-          "MovieDB",
+        title: const Text(
+          APP_TITLE,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.menu,
           color: Colors.white,
         ),
@@ -62,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-              child: Icon(
+              child: const Icon(
                 Icons.search,
                 color: Colors.white,
               ),
@@ -81,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                   homeController.onTapTab(index);
                 },
               ),
-              SizedBox(height: MARGIN_MEDIUM_2),
+              const SizedBox(height: MARGIN_MEDIUM_2),
               Obx(() {
                 List<MovieVO> movieList =
                     getMovieListByTabId(homeController.tabIndex.value);
@@ -111,68 +113,87 @@ class _HomePageState extends State<HomePage> {
 class MovieGridSectionView extends StatelessWidget {
   final int tabIndex;
   final List<MovieVO> movieList;
+  final _debouncer = CustomDebouncer(milliseconds: 500);
+  final HomeController _homeController = Get.find<HomeController>();
 
   MovieGridSectionView({required this.tabIndex, required this.movieList});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Visibility(
-          visible: tabIndex == 2,
-          child: SearchFieldView(),
-        ),
-        GridView.builder(
-          itemCount: movieList.length,
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 130 / 200,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MovieDetailsPage(
-                      movieId: movieList[index].id ?? 0,
-                      tabIndex: tabIndex,
-                    ),
-                  ),
-                );
-              },
-              child: MovieView(movie: movieList[index]),
-            );
-          },
-        ),
-      ],
-    );
+    return (movieList.isNotEmpty)
+        ? Column(
+            children: [
+              Visibility(
+                visible: tabIndex == 2,
+                child: SearchFieldView(
+                  onChanged: (String keyword) {
+                    _debouncer
+                        .run(() => _homeController.onSearchMovies(keyword));
+                  },
+                ),
+              ),
+              GridView.builder(
+                itemCount: movieList.length,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 130 / 200,
+                ),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      Get.to(
+                        () => MovieDetailsPage(
+                          movieId: movieList[index].id ?? 0,
+                          tabIndex: tabIndex,
+                        ),
+                      );
+                    },
+                    child: MovieView(movie: movieList[index]),
+                  );
+                },
+              ),
+            ],
+          )
+        : Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: MARGIN_MEDIUM_2, vertical: MARGIN_MEDIUM_2),
+              child: CircularProgressIndicator(),
+            ),
+          );
   }
 }
 
 class SearchFieldView extends StatelessWidget {
-  const SearchFieldView({
-    Key? key,
-  }) : super(key: key);
+  final Function(String) onChanged;
+
+  SearchFieldView({required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
-      padding: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
+      margin: const EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+      padding: const EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
       child: TextField(
+        onChanged: (value) {
+          onChanged(value);
+        },
         cursorColor: PLAY_BUTTON_COLOR,
-        decoration: InputDecoration(
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+        decoration: const InputDecoration(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: PLAY_BUTTON_COLOR),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: PLAY_BUTTON_COLOR),
             ),
-            hintText: "Search Movies",
+            hintText: HINT_TEXT_SEARCH_MOVIES,
             hintStyle: TextStyle(
               color: TITLE_TEXT_COLOR,
             )),
@@ -190,7 +211,7 @@ class TabBarSectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: HOME_SCREEN_BACKGROUND_COLOR,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         right: MARGIN_MEDIUM_2,
         left: MARGIN_MEDIUM_2,
         top: MARGIN_MEDIUM_2,
@@ -201,9 +222,9 @@ class TabBarSectionView extends StatelessWidget {
           indicatorColor: PLAY_BUTTON_COLOR,
           unselectedLabelColor: TITLE_TEXT_COLOR,
           tabs: [
-            CategoryTabView(title: "Now Playing"),
-            CategoryTabView(title: "Popular Movies"),
-            CategoryTabView(title: "Search Movies"),
+            CategoryTabView(title: LABEL_NOW_PLAYING_MOVIES),
+            CategoryTabView(title: LABEL_POPULAR_MOVIES),
+            CategoryTabView(title: LABEL_SEARCH_MOVIES),
           ],
           onTap: (index) {
             onTap(index);
@@ -225,7 +246,7 @@ class CategoryTabView extends StatelessWidget {
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           height: 1.3,
         ),
       ),
